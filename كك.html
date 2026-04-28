@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise for Anita</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap');
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle, #fff5f7 0%, #ffe4e9 100%); 
+            overflow: hidden; font-family: 'Poppins', sans-serif; 
+        }
+        
+        #intro-screen { 
+            position: fixed; width: 100%; height: 100%; z-index: 200; 
+            display: flex; justify-content: center; align-items: center; 
+            background: #fff; transition: 1s ease-in-out;
+        }
+        .intro-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem; color: #ff4d6d;
+            text-align: center; animation: softFade 2.5s infinite;
+            padding: 20px;
+        }
+        @keyframes softFade { 0%, 100% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
+
+        #cake-screen { 
+            position: fixed; width: 100%; height: 100%; z-index: 100; 
+            display: none; flex-direction: column; justify-content: center; align-items: center; 
+            cursor: pointer; 
+        }
+
+        .cake-gif { width: 220px; height: auto; z-index: 110; transition: transform 0.3s; }
+        .cake-gif:hover { transform: scale(1.05); }
+
+        #gallery { display: none; width: 100%; height: 100%; position: relative; z-index: 50; }
+        .photo { 
+            position: absolute; width: 110px; height: 150px; 
+            border: 4px solid #fff; border-radius: 10px; object-fit: cover;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            opacity: 0; transition: 1.2s cubic-bezier(0.17, 0.88, 0.32, 1.1);
+            z-index: 55;
+        }
+        @media (min-width: 768px) { .photo { width: 180px; height: 240px; } }
+
+        .heart-particle { 
+            position: absolute; pointer-events: none; z-index: 40; 
+            color: #ff4d6d; opacity: 0.7;
+        }
+
+        #final-text { 
+            position: fixed; top: 8%; left: 50%; transform: translateX(-50%);
+            color: #ff4d6d; text-align: center; z-index: 60; 
+            font-family: 'Dancing Script', cursive; font-size: 2.5rem;
+            display: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9);
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic">
+        <source src="k.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="intro-screen">
+        <div class="intro-text">Behind this screen, <br> lies a beautiful 20-year story...</div>
+    </div>
+
+    <div id="cake-screen" onclick="startSurprise()">
+        <img src="k.jpg" class="cake-gif" alt="Birthday Cake">
+        <p style="color: #ff4d6d; margin-top: 15px; font-family: 'Dancing Script', cursive; font-size: 1.5rem;">Touch the magic ✨</p>
+    </div>
+
+    <div id="gallery">
+        <div id="final-text">Happy Birthday, my cat!</div>
+        <img src="s1.jpg" class="photo" id="p1">
+        <img src="s2.jpg" class="photo" id="p2">
+        <img src="s3.jpg" class="photo" id="p3">
+        <img src="s4.jpg" class="photo" id="p4">
+        <img src="s5.jpg" class="photo" id="p5">
+        <img src="s10.jpg" class="photo" id="p6">
+    </div>
+
+    <script>
+        // إظهار التورتة بعد الترحيب
+        setTimeout(() => {
+            document.getElementById('intro-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-screen').style.display = 'none';
+                document.getElementById('cake-screen').style.display = 'flex';
+            }, 1000);
+        }, 3000);
+
+        function startSurprise() {
+            // تشغيل الأغنية فور الضغط
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(error => {
+                console.log("Audio play failed, user interaction needed.");
+            });
+
+            document.getElementById('cake-screen').style.transition = '0.8s';
+            document.getElementById('cake-screen').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('cake-screen').style.display = 'none';
+                document.getElementById('gallery').style.display = 'block';
+                document.getElementById('final-text').style.display = 'block';
+                showPhotos();
+            }, 800);
+
+            // نافورة القلوب والورد
+            setInterval(createHeart, 120); 
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = Math.random() > 0.5 ? '❤️' : '🌸'; 
+            heart.style.left = Math.random() * 50 + 'vw';
+            heart.style.top = '90vh'; 
+            document.body.appendChild(heart);
+
+            const duration = 4 + Math.random() * 3;
+            const size = 12 + Math.random() * 10;
+            heart.style.fontSize = size + 'px';
+
+            heart.animate([
+                { transform: `translateY(0) rotate(0deg)`, opacity: 0.7 },
+                { transform: `translateY(-120vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                easing: 'linear'
+            }).onfinish = () => heart.remove();
+        }
+
+        function showPhotos() {
+            const positions = [
+                {t: '22%', l: '12%', r: '-10deg'}, 
+                {t: '25%', l: '65%', r: '12deg'},
+                {t: '48%', l: '38%', r: '5deg'}, 
+                {t: '52%', l: '8%', r: '-8deg'},
+                {t: '72%', l: '72%', r: '10deg'}, 
+                {t: '78%', l: '18%', r: '-5deg'}
+            ];
+
+            for (let i = 1; i <= 6; i++) {
+                setTimeout(() => {
+                    const p = document.getElementById('p' + i);
+                    if(p) {
+                        p.style.opacity = '1';
+                        p.style.top = positions[i-1].t;
+                        p.style.left = positions[i-1].l;
+                        p.style.transform = `translate(0, 0) scale(1) rotate(${positions[i-1].r})`;
+                    }
+                }, 500 + (i * 500));
+            }
+        }
+    </script>
+</body>
+</html>
